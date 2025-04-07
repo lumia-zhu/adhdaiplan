@@ -61,7 +61,8 @@ function initTheme() {
 }
 
 // 添加新的待办事项
-function addTodo() {
+// 将addTodo函数设置为全局可访问
+window.addTodo = function() {
     const text = todoInput.value.trim();
     
     // 验证输入不为空
@@ -196,26 +197,50 @@ function toggleTodoStatus(index, event) {
     }
 }
 
-// 编辑待办事项
+// 编辑待办事项 - 现在只是调用统一的表单函数
 function editTodo(index) {
-    const todo = todos[index];
+    createTaskForm(index);
+}
+
+// 创建任务表单（新增或编辑）
+function createTaskForm(index) {
+    // 如果有index，则是编辑模式，否则是新增模式
+    const isEditMode = index !== undefined;
+    const todo = isEditMode ? todos[index] : { text: '', dueDate: '', priority: null };
     
     // 创建编辑表单
     const editForm = document.createElement('div');
     editForm.className = 'edit-form';
     
+    // 设置表单标题（使用:before伪元素显示）
+    editForm.dataset.formTitle = isEditMode ? '编辑任务' : '新增任务';
+    
     // 创建输入框
     const textInput = document.createElement('input');
     textInput.type = 'text';
     textInput.value = todo.text;
-    textInput.className = 'edit-input';
+    textInput.placeholder = '输入任务内容...';
     
-    // 创建日期输入框
+    // 创建日期输入框和标签
+    const dateLabel = document.createElement('label');
+    dateLabel.textContent = '截止日期：';
+    dateLabel.style.fontSize = '0.9rem';
+    dateLabel.style.fontWeight = '500';
+    dateLabel.style.marginBottom = '8px';
+    dateLabel.style.display = 'block';
+    
     const dateInput = document.createElement('input');
     dateInput.type = 'datetime-local';
     dateInput.value = todo.dueDate || '';
     
-    // 创建优先级选择框
+    // 创建优先级选择框和标签
+    const priorityLabel = document.createElement('label');
+    priorityLabel.textContent = '优先级：';
+    priorityLabel.style.fontSize = '0.9rem';
+    priorityLabel.style.fontWeight = '500';
+    priorityLabel.style.marginBottom = '8px';
+    priorityLabel.style.display = 'block';
+    
     const prioritySelect = document.createElement('select');
     prioritySelect.innerHTML = `
         <option value="none" ${todo.priority === null ? 'selected' : ''}>无</option>
@@ -224,19 +249,47 @@ function editTodo(index) {
         <option value="high" ${todo.priority === 'high' ? 'selected' : ''}>高</option>
     `;
     
+    // 创建按钮组
+    const buttonGroup = document.createElement('div');
+    buttonGroup.className = 'button-group';
+    
     // 创建保存按钮
     const saveButton = document.createElement('button');
-    saveButton.textContent = '保存';
+    saveButton.textContent = isEditMode ? '保存任务' : '添加任务';
     saveButton.className = 'save-button';
     saveButton.addEventListener('click', function() {
-        // 更新待办事项
-        todo.text = textInput.value.trim();
-        todo.dueDate = dateInput.value || null;
-        todo.priority = prioritySelect.value !== 'none' ? prioritySelect.value : null;
+        const text = textInput.value.trim();
+        
+        // 验证输入不为空
+        if (text === '') {
+            alert('请输入任务内容！');
+            return;
+        }
+        
+        if (isEditMode) {
+            // 更新待办事项
+            todo.text = text;
+            todo.dueDate = dateInput.value || null;
+            todo.priority = prioritySelect.value !== 'none' ? prioritySelect.value : null;
+        } else {
+            // 创建新的待办事项对象
+            const newTodo = {
+                id: generateId(),
+                text: text,
+                completed: false,
+                createdAt: new Date().toISOString(),
+                dueDate: dateInput.value || null,
+                priority: prioritySelect.value !== 'none' ? prioritySelect.value : null
+            };
+            
+            // 添加到数组
+            todos.push(newTodo);
+        }
         
         // 保存并更新UI
         saveTodos();
         renderTodoList();
+        updateStats();
         
         // 关闭编辑表单
         document.body.removeChild(editForm.parentNode);
@@ -250,17 +303,41 @@ function editTodo(index) {
         document.body.removeChild(editForm.parentNode);
     });
     
+    // 添加按钮到按钮组
+    buttonGroup.appendChild(saveButton);
+    buttonGroup.appendChild(cancelButton);
+    
+    // 创建日期和优先级容器
+    const dateContainer = document.createElement('div');
+    dateContainer.appendChild(dateLabel);
+    dateContainer.appendChild(dateInput);
+    
+    const priorityContainer = document.createElement('div');
+    priorityContainer.appendChild(priorityLabel);
+    priorityContainer.appendChild(prioritySelect);
+    
+    // 创建高级选项容器
+    const advancedOptions = document.createElement('div');
+    advancedOptions.className = 'advanced-options';
+    advancedOptions.appendChild(dateContainer);
+    advancedOptions.appendChild(priorityContainer);
+    
     // 添加所有元素到表单
     editForm.appendChild(textInput);
-    editForm.appendChild(dateInput);
-    editForm.appendChild(prioritySelect);
-    editForm.appendChild(saveButton);
-    editForm.appendChild(cancelButton);
+    editForm.appendChild(advancedOptions);
+    editForm.appendChild(buttonGroup);
     
     // 创建模态框
     const modal = document.createElement('div');
     modal.className = 'edit-modal';
     modal.appendChild(editForm);
+    
+    // 点击模态框空白区域关闭
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            document.body.removeChild(modal);
+        }
+    });
     
     // 添加到页面
     document.body.appendChild(modal);
@@ -477,9 +554,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 显示表单按钮事件
     showFormButton.addEventListener('click', function() {
-        todoForm.style.display = 'block';
-        overlay.style.display = 'block';
-        todoInput.focus();
+        createTaskForm();
     });
     
     // 隐藏表单按钮事件

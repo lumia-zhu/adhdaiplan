@@ -220,58 +220,150 @@ body.dark-mode .completion-circle::after {
     left: 25%;
     transform: translate(-50%, -50%);
     width: 90%;
-    max-width: 400px;
+    max-width: 450px;
     background-color: var(--card-bg);
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.08);
+    padding: 25px;
     z-index: 200;
     display: none;
+    animation: formFadeIn 0.3s ease-out;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@keyframes formFadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -48%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
 }
 
 .form-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .form-header h3 {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     color: var(--text-color);
+    font-weight: 600;
+    letter-spacing: 0.3px;
 }
 
 .close-form-button {
-    background: none;
+    background: rgba(0, 0, 0, 0.05);
     border: none;
-    color: var(--secondary-color);
-    font-size: 1.2rem;
+    color: var(--text-color);
+    font-size: 1rem;
     cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.close-form-button:hover {
+    background: rgba(0, 0, 0, 0.1);
+    transform: rotate(90deg);
 }
 
 .form-row {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+#todo-input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: rgba(0, 0, 0, 0.02);
+    color: var(--text-color);
+}
+
+#todo-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.15);
+    outline: none;
+    background-color: white;
+}
+
+.advanced-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.option {
+    display: flex;
+    flex-direction: column;
+}
+
+.option label {
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+#todo-date, #todo-priority {
+    padding: 12px;
+    border: 2px solid rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    font-size: 0.9rem;
+    background-color: rgba(0, 0, 0, 0.02);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+#todo-date:focus, #todo-priority:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.15);
+    outline: none;
+    background-color: white;
 }
 
 .add-button-full {
     width: 100%;
-    padding: 12px;
-    background-color: var(--primary-color);
+    padding: 15px;
+    background: linear-gradient(135deg, var(--primary-color), #3a7bd5);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(66, 133, 244, 0.2);
+    letter-spacing: 0.5px;
 }
 
 .add-button-full:hover {
-    background-color: #3a7bd5;
+    background: linear-gradient(135deg, #3a7bd5, var(--primary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(66, 133, 244, 0.3);
+}
+
+.add-button-full:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(66, 133, 244, 0.2);
 }
 
 /* 覆盖层 */
-.overlay {
+.overlay, .edit-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -279,7 +371,151 @@ body.dark-mode .completion-circle::after {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 150;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay {
     display: none;
+}
+
+/* 编辑表单样式 */
+.edit-form {
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+    width: 90%;
+    max-width: 450px;
+    animation: formFadeIn 0.3s ease-out;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+}
+
+.edit-form:before {
+    content: attr(data-form-title);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    display: block;
+    letter-spacing: 0.3px;
+}
+
+.edit-form input[type="text"] {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: rgba(0, 0, 0, 0.02);
+    color: var(--text-color);
+}
+
+.edit-form input[type="text"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.15);
+    outline: none;
+    background-color: white;
+}
+
+.edit-form input[type="datetime-local"] {
+    padding: 12px;
+    border: 2px solid rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    font-size: 0.9rem;
+    background-color: rgba(0, 0, 0, 0.02);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.edit-form input[type="datetime-local"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.15);
+    outline: none;
+    background-color: white;
+}
+
+.edit-form select {
+    padding: 12px;
+    border: 2px solid rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    font-size: 0.9rem;
+    background-color: rgba(0, 0, 0, 0.02);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.edit-form select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.15);
+    outline: none;
+    background-color: white;
+}
+
+.edit-form .button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.edit-form .save-button {
+    flex: 1;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--primary-color), #3a7bd5);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(66, 133, 244, 0.2);
+    letter-spacing: 0.5px;
+}
+
+.edit-form .save-button:hover {
+    background: linear-gradient(135deg, #3a7bd5, var(--primary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(66, 133, 244, 0.3);
+}
+
+.edit-form .save-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(66, 133, 244, 0.2);
+}
+
+.edit-form .cancel-button {
+    flex: 1;
+    padding: 15px;
+    background: linear-gradient(135deg, #e0e0e0, #d1d1d1);
+    color: #555;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.5px;
+}
+
+.edit-form .cancel-button:hover {
+    background: linear-gradient(135deg, #d1d1d1, #e0e0e0);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.edit-form .cancel-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* 右侧聊天机器人区域 */
