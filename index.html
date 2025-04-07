@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的待办事项</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <!-- 添加专业动画库 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 左侧待办事项区域 -->
+        <div class="todo-section">
+            <div class="container">
+                <div class="header">
+                    <div class="welcome-message">
+                        <h1>Hi Zihao,</h1>
+                        <p>This is your task today</p>
+                    </div>
+                </div>
+                
+                <!-- 待办事项统计信息卡片 -->
+                <div class="todo-stats-card">
+                    <div class="stats-header">
+                        <h2>今日任务</h2>
+                        <div class="completion-circle">
+                            <span class="completion-percent">0%</span>
+                        </div>
+                    </div>
+                    <div class="stats-content">
+                        <div class="stat-item">
+                            <span class="stat-number" id="pending-count">0</span>
+                            <span class="stat-label">待办任务</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="total-count">0</span>
+                            <span class="stat-label">总任务数</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 添加新待办事项的浮动按钮 -->
+                <button class="add-todo-button" id="show-form-button">
+                    <i class="fas fa-plus"></i>
+                </button>
+                
+                <!-- 添加新待办事项的表单（默认隐藏） -->
+                <div class="todo-form" id="todo-form">
+                    <div class="form-header">
+                        <h3>添加新任务</h3>
+                        <button class="close-form-button" id="close-form-button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="form-row">
+                        <input type="text" id="todo-input" placeholder="输入新的待办事项...">
+                    </div>
+                    <div class="form-row advanced-options">
+                        <div class="option">
+                            <label for="todo-date">截止日期：</label>
+                            <input type="datetime-local" id="todo-date">
+                        </div>
+                        <div class="option">
+                            <label for="todo-priority">优先级：</label>
+                            <select id="todo-priority">
+                                <option value="none" selected>无</option>
+                                <option value="low">低</option>
+                                <option value="medium">中</option>
+                                <option value="high">高</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <button id="add-button" class="add-button-full">添加任务</button>
+                    </div>
+                </div>
+                
+                <!-- 待办事项列表 -->
+                <div class="todo-container">
+                    <ul id="todo-list">
+                        <!-- 这里会通过JavaScript动态添加待办事项 -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 右侧聊天机器人区域 -->
+        <div class="chat-section">
+            <div class="chat-header">
+                <div class="chat-logo">
+                    <i class="fas fa-robot"></i>
+                    <h2>智能助手</h2>
+                </div>
+            </div>
+            
+            <!-- 聊天消息区域 -->
+            <div class="chat-messages" id="chat-messages">
+                <!-- 欢迎消息 -->
+                <div class="message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>您好！我是您的智能助手，可以回答您的问题、提供建议或者帮助您完成任务。请随时向我提问！</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 聊天输入区域 -->
+            <div class="chat-input-container">
+                <textarea id="chat-input" placeholder="输入您的问题..."></textarea>
+                <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 动画库 -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/party-js@2.2.0/bundle/party.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.10.7/dist/fireworks.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mojs@1.3.0/build/mo.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lottie-web@5.12.2/build/player/lottie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/magic-snowflakes@6.1.0/dist/snowflakes.min.js"></script>
+    
+    <!-- 主要脚本 -->
+    <!-- 先加载配置文件 -->
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <script src="chat.js"></script>
+</body>
+</html>

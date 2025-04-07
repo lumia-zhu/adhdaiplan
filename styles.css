@@ -1,0 +1,1145 @@
+/* 全局样式 */
+:root {
+    --primary-color: #4a6ee0;
+    --primary-light: #eef2ff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --background-color: #f8f9fa;
+    --card-bg: #ffffff;
+    --text-color: #212529;
+    --border-color: #dee2e6;
+    --shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+    
+    /* 聊天机器人颜色 */
+    --bot-primary: #7e57c2;
+    --bot-light: #f3e5f5;
+    --user-message-bg: #e3f2fd;
+    --bot-message-bg: #f3e5f5;
+}
+
+/* 暗色主题 */
+body.dark-mode {
+    --primary-color: #7289da;
+    --primary-light: #2c2f33;
+    --secondary-color: #99aab5;
+    --background-color: #23272a;
+    --card-bg: #2c2f33;
+    --text-color: #ffffff;
+    --border-color: #4e5d94;
+    --shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    
+    /* 暗色主题聊天机器人颜色 */
+    --bot-primary: #9575cd;
+    --bot-light: #4527a0;
+    --user-message-bg: #1a237e;
+    --bot-message-bg: #4a148c;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    transition: var(--transition);
+    height: 100vh;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+/* 应用容器 - 左右两栏布局 */
+.app-container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    background-color: #f8f9fa;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* 左侧待办事项区域 */
+.todo-section {
+    flex: 1;
+    background-color: var(--background-color);
+    padding: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* 待办事项统计卡片 */
+.todo-stats-card {
+    background-color: #4a90e2;
+    color: white;
+    border-radius: 20px;
+    margin: 5px 0 15px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(74, 144, 226, 0.3);
+}
+
+.stats-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.stats-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.completion-circle {
+    --completion-percent: 0%;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: conic-gradient(
+        white var(--completion-percent), 
+        transparent var(--completion-percent)
+    );
+}
+
+.completion-circle::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    border-radius: 50%;
+    background-color: #4a90e2;
+}
+
+/* 暗色模式下的进度条样式 */
+body.dark-mode .completion-circle {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .completion-circle::after {
+    background-color: #2c3e50;
+}
+
+.completion-percent {
+    font-size: 0.9rem;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+.stats-content {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 45%;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    text-align: center;
+}
+
+/* 添加按钮 */
+.add-todo-button {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: #2196F3; /* Material Blue */
+    color: white;
+    border: none;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 5px -1px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1000;
+}
+
+.add-todo-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 11px -2px rgba(0,0,0,0.2), 0 8px 16px 2px rgba(0,0,0,0.14), 0 6px 20px 5px rgba(0,0,0,0.12);
+    background-color: #1976D2; /* 深一点的蓝色 */
+}
+
+/* 表单样式 */
+.todo-form {
+    position: fixed;
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 200;
+    display: none;
+}
+
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.form-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--text-color);
+}
+
+.close-form-button {
+    background: none;
+    border: none;
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.form-row {
+    margin-bottom: 15px;
+}
+
+.add-button-full {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-button-full:hover {
+    background-color: #3a7bd5;
+}
+
+/* 覆盖层 */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 150;
+    display: none;
+}
+
+/* 右侧聊天机器人区域 */
+.chat-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 聊天容器 */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--card-bg);
+    box-shadow: var(--shadow);
+    margin: 10px;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+/* 聊天头部 */
+.chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background-color: var(--bot-primary);
+    color: white;
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+}
+
+.chat-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chat-logo i {
+    font-size: 1.5rem;
+}
+
+.chat-logo h2 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+/* 聊天消息区域 */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* 消息样式 */
+.message {
+    display: flex;
+    gap: 10px;
+    max-width: 80%;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.bot-message {
+    align-self: flex-start;
+}
+
+.user-message {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.message-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.bot-message .message-avatar {
+    background-color: var(--bot-primary);
+    color: white;
+}
+
+.user-message .message-avatar {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.message-content {
+    padding: 12px 15px;
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+}
+
+.bot-message .message-content {
+    background-color: var(--bot-message-bg);
+    border-top-left-radius: 5px;
+}
+
+.user-message .message-content {
+    background-color: var(--user-message-bg);
+    border-top-right-radius: 5px;
+}
+
+.message-content p {
+    margin: 0;
+    word-wrap: break-word;
+}
+
+/* 聊天输入区域 */
+.chat-input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    background-color: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+}
+
+#chat-input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    resize: none;
+    height: 50px;
+    max-height: 120px;
+    transition: var(--transition);
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+#chat-input:focus {
+    outline: none;
+    border-color: var(--bot-primary);
+    box-shadow: 0 0 0 2px rgba(126, 87, 194, 0.2);
+}
+
+#send-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--bot-primary);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+#send-button:hover {
+    background-color: var(--primary-color);
+    transform: scale(1.05);
+}
+
+#send-button:active {
+    transform: scale(0.95);
+}
+
+#send-button i {
+    font-size: 1.2rem;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 容器 */
+.container {
+    width: 100%;
+    max-width: 600px;
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+/* 头部样式 */
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px 0;
+}
+
+.app-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background-color: #4285F4;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.app-logo i {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.welcome-message {
+    display: flex;
+    flex-direction: column;
+}
+
+.welcome-message h1 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 2px 0;
+}
+
+.welcome-message p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
+
+.theme-toggle {
+    display: flex;
+    align-items: center;
+}
+
+.theme-toggle i {
+    margin-right: 10px;
+    font-size: 18px;
+    color: var(--primary-color);
+}
+
+/* 开关样式 */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+
+/* 表单样式 */
+.todo-form {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-row {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.form-row:last-child {
+    margin-bottom: 0;
+}
+
+#todo-input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    font-size: 16px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    transition: var(--transition);
+}
+
+#todo-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+#add-button {
+    padding: 12px 25px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+}
+
+#add-button:hover {
+    background-color: #3a5bd9;
+}
+
+.advanced-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.option {
+    flex: 1;
+    min-width: 200px;
+}
+
+.option label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: var(--secondary-color);
+}
+
+.option input, .option select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    transition: var(--transition);
+}
+
+.option input:focus, .option select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* 待办事项列表样式 */
+.todo-container {
+    margin-top: 20px;
+    padding: 0 10px;
+}
+
+#todo-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.todo-item {
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    margin-bottom: 15px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.todo-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.todo-checkbox {
+    margin-right: 15px;
+    position: relative;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.todo-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 24px;
+    width: 24px;
+    background-color: #fff;
+    border: 2px solid #e0e0e0;
+    border-radius: 50%;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.todo-checkbox input[type="checkbox"]:checked ~ .checkmark {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.checkmark:after {
+    content: "";
+    position: relative;
+    display: none;
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    top: -1px;
+}
+
+.todo-checkbox input[type="checkbox"]:checked ~ .checkmark:after {
+    display: block;
+}
+
+.todo-content {
+    flex-grow: 1;
+}
+
+.todo-text {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-color);
+    transition: var(--transition);
+}
+
+.todo-item.completed .todo-text {
+    text-decoration: line-through;
+    color: var(--secondary-color);
+}
+
+.todo-details {
+    font-size: 0.8rem;
+    color: #ff7eb9;
+    margin-top: 5px;
+}
+
+.todo-date {
+    margin-right: 10px;
+}
+
+.todo-priority {
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+.priority-high {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.priority-medium {
+    background-color: var(--warning-color);
+    color: #333;
+}
+
+.priority-low {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+}
+
+.todo-actions {
+    display: flex;
+    gap: 5px;
+    margin-left: 10px;
+}
+
+.todo-button {
+    background: none;
+    border: none;
+    color: var(--secondary-color);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 5px;
+    transition: var(--transition);
+    border-radius: 4px;
+    opacity: 0.7;
+}
+
+.todo-button:hover {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    opacity: 1;
+}
+
+.edit-button {
+    color: var(--primary-color);
+}
+
+.delete-button {
+    color: var(--danger-color);
+.edit-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    margin-right: 10px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+/* 编辑模态框样式 */
+.edit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.edit-form {
+    background-color: var(--card-bg);
+    padding: 25px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    width: 90%;
+    max-width: 500px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        max-width: 100%;
+    }
+    
+    .form-row {
+        flex-direction: column;
+    }
+    
+    #todo-input {
+        border-radius: var(--border-radius);
+        margin-bottom: 10px;
+    }
+    
+    #add-button {
+        border-radius: var(--border-radius);
+    }
+    
+    .advanced-options {
+        flex-direction: column;
+    }
+    
+    .option {
+        min-width: 100%;
+    }
+    
+    .todo-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .todo-checkbox {
+        margin-bottom: 10px;
+    }
+    
+    .todo-content {
+        margin-right: 0;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    
+    .todo-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
+    .stats-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+/* 聊天区域样式 - 手机界面风格 */
+.chat-section {
+    width: 320px;
+    background-color: #f5f5f5;
+    border-left: 1px solid #e0e0e0;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 320px;
+    height: 100vh;
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+}
+
+.chat-header {
+    background-color: #4a90e2;
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    height: 50px;
+    box-sizing: border-box;
+}
+
+.chat-logo {
+    display: flex;
+    align-items: center;
+}
+
+.chat-logo i {
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+
+.chat-logo h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: #f0f2f5;
+    height: calc(100vh - 110px);
+}
+
+.message {
+    display: flex;
+    max-width: 80%;
+    margin-bottom: 10px;
+}
+
+.bot-message {
+    align-self: flex-start;
+}
+
+.user-message {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.message-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #4a90e2;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.user-message .message-avatar {
+    background-color: #2196F3;
+    margin-right: 0;
+    margin-left: 10px;
+}
+
+.message-content {
+    background-color: white;
+    padding: 10px 15px;
+    border-radius: 18px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.bot-message .message-content {
+    border-top-left-radius: 4px;
+    background-color: white;
+}
+
+.user-message .message-content {
+    border-top-right-radius: 4px;
+    background-color: #dcf8c6;
+}
+
+.message-content p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.chat-input-container {
+    display: flex;
+    padding: 10px;
+    background-color: white;
+    border-top: 1px solid #e0e0e0;
+    align-items: center;
+    position: relative;
+}
+
+#chat-input {
+    flex: 1;
+    border: none;
+    background-color: #f0f2f5;
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-size: 0.95rem;
+    resize: none;
+    max-height: 100px;
+    min-height: 40px;
+    outline: none;
+}
+
+#send-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#send-button:hover {
+    background-color: #3a7bd5;
+}
+
+#send-button i {
+    font-size: 1rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 992px) {
+    .app-container {
+        flex-direction: column;
+    }
+    
+    .chat-section {
+        width: 100%;
+        height: 500px;
+        border-left: none;
+        border-top: 1px solid #e0e0e0;
+    }
+    
+    .add-todo-button {
+        right: 20px;
+        bottom: 520px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 20px 15px;
+    }
+    
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .form-row {
+        flex-direction: column;
+    }
+    
+    #todo-input {
+        border-radius: var(--border-radius);
+        margin-bottom: 10px;
+    }
+    
+    #add-button {
+        border-radius: var(--border-radius);
+    }
+    
+    .filter-options {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .todo-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .todo-checkbox {
+        margin-bottom: 10px;
+    }
+    
+    .todo-actions {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
+    .stats-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
